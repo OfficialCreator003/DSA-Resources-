@@ -1,0 +1,421 @@
+                              
+
+1. //merge sort(divide and conquer)
+public class main{
+ public static void printmyarray(int array[]){
+     for(int i=0;i<array.length;i++){
+         System.out.print(array[i]+" ");
+         
+     } }
+     
+     public static void mergesort(int array[],int startindex,int endindex){
+         
+     if(startindex >= endindex){
+        return; 
+     } 
+     
+          //OR:-  (startindex+endindex)/2; 
+         int mid=startindex + (endindex - startindex) / 2;  
+         
+         mergesort(array,startindex,mid);
+         mergesort(array,mid+1,endindex);
+         merge(array,startindex,mid,endindex);
+         }
+         
+  public static void merge(int array[],int startindex,int mid,int endindex){
+      int temp[]=new int[endindex-startindex+1];
+      int i=startindex;
+      int j=mid+1;
+      int k=0;
+      
+      while(i<=mid && j<=endindex){
+          if(array[i]<array[j]){
+              temp[k]=array[i];
+              i++;
+          } else {
+              temp[k]=array[j];
+              j++;
+          }
+          k++;   }
+          //left part
+          while(i<=mid){
+              temp[k++]=array[i++];
+          }
+          //right part
+          while(j<=endindex){
+              temp[k++]=array[j++];
+          }
+         
+         //copy temp to oruganal
+         for (k = 0, i = startindex; k < temp.length; k++, i++) {
+            array[i] = temp[k];
+        }
+          
+  }         
+public static void main(String args[]){
+  int array[]={10,23,5,9,88,9};
+ 
+ mergesort(array,0,array.length-1);
+printmyarray(array);
+ 
+}
+}
+
+
+2.//quick sort
+
+public class main {
+    public static void printmyarray(int array[]) {
+        for (int val : array) {
+            System.out.print(val + " ");
+        }
+        System.out.println();
+    }
+
+    public static void quicksort(int array[], int startindex, int endindex) {
+        // 1. Base Case
+        if (startindex >= endindex) {
+            return;
+        }
+
+        // 2. Partition and get Pivot Index
+        int pivotindex = partition(array, startindex, endindex);
+
+        // 3. Recursive calls
+        quicksort(array, startindex, pivotindex - 1); // Left part
+        quicksort(array, pivotindex + 1, endindex);  // Right part
+    }
+
+    public static int partition(int array[], int startindex, int endindex) {
+        int pivot = array[endindex];
+        int i = startindex - 1; // Makes space for elements smaller than pivot
+
+        for (int j = startindex; j < endindex; j++) {
+            if (array[j] <= pivot) {
+                i++;
+                // Swap array[i] and array[j]
+                int temp = array[j];
+                array[j] = array[i];
+                array[i] = temp;
+            }
+        }
+
+        // Final swap to put pivot in correct position (at i + 1)
+        i++;
+        int temp = pivot;
+        array[endindex] = array[i]; 
+        array[i] = temp;
+        
+        return i; // Return the pivot index
+    }
+
+    public static void main(String args[]) {
+        int array[] = {10, 20, 5, 9};
+        quicksort(array, 0, array.length - 1);
+        printmyarray(array);
+    }
+}
+
+
+
+//3.Rotated sorted array(modify binary search)
+
+public class main{
+    public static int sortedrotededarray(int array[],int target,int startindex,int endindex){
+        
+        //Base case
+        if(startindex>endindex){
+            return -1;
+        }
+       
+       //kam 
+      int mid=startindex+(endindex-startindex)/2;
+        
+        //case found
+        if(array[mid]==target){
+            return mid;  }
+        
+            
+    //mid on line1    
+    if(array[startindex]<=array[mid]){
+       //case a: Left
+       if(array[startindex]<=target && target <= array[mid]){
+           return sortedrotededarray(array,target,startindex,mid-1);
+           }else{
+               //case b: Right
+               return sortedrotededarray(array,target,mid+1,endindex);
+           }  }
+       
+       
+       //mid on line2
+       else{
+          //case c: Right 
+          if(array[mid]<=target && target<=array[endindex] ){
+              return sortedrotededarray(array,target,mid+1,endindex);
+          } else {
+              
+              //case d: left
+              return sortedrotededarray(array,target,startindex,mid-1);
+          }
+          
+       }
+    }
+    
+    public static void main(String args[]){
+        int array[]={10,20,30,40,50};
+        int target=30;
+        
+        int tarindex=sortedrotededarray(array,target,0,array.length-1);
+        System.out.println(tarindex);
+        
+    }
+}
+
+........................................................................
+//Resursion in java
+
+1. 
+    public static int talingproblem(int n){
+       if(n==0||n==1){
+          return 1; 
+       }
+       
+       //vertical
+        int fnm1=talingproblem(n-1);
+        //horizontal 
+        int fnm2=talingproblem(n-2);
+        
+        int totalways=fnm1+fnm2;
+        return totalways;
+
+// System.out.println(talingproblem(3));
+    }
+    
+    
+
+
+2.    public static void removeduplacates(String str,int index,StringBuilder newstr,boolean map[]){
+        if(index==str.length()){
+            System.out.println(newstr);
+            return;
+        }
+       char currchar=str.charAt(index);
+       if(map[currchar-'a'] == true){
+       removeduplacates(str,index+1,newstr,map);
+       } else{
+           map[currchar-'a']=true;
+             removeduplacates(str,index+1,newstr.append(currchar),map); 
+       }  
+  
+// String str="aappaannaacollleage";
+    // removeduplacates(str,0,new StringBuilder(""),new boolean[30]);
+
+ }
+       
+   
+
+
+
+
+3. public static int friendparing(int n){
+        if(n==1||n==2){
+           return n; 
+        }
+  //OR:- return friendparing(n-1)+(n-1)*friendparing(n-2);      
+        
+        //single
+        int fnm1=friendparing(n-1);
+        
+        //pair
+        int fnm2=friendparing(n-2);
+        int pairways=(n-1)*fnm2;
+        
+        //totalways
+        int totalways=fnm1+pairways;
+        return totalways;
+
+// System.out.println(friendparing(3));
+    } 
+
+
+
+
+
+    
+4.    public static void printBinarystring(int n,int lastplace,String str ){
+        
+        if(n==0){
+           System.out.println(str);
+           return;
+        }
+        
+        printBinarystring(n-1,0,str+"0");
+        
+        if(lastplace==0){
+             printBinarystring(n-1,0,str+"1");
+        }
+
+// printBinarystring(3,0,"");
+        
+    }
+
+
+
+---------------------------------------------------------------------------------------
+
+//Resursion in java
+
+    1. public static void printdec(int n){
+     
+     if(n==1){
+         System.out.println(n); 
+         return ;
+      } 
+      System.out.print(n+" ");
+      printdec(n-1);
+        //   printdec(5);
+    }
+    
+    
+    
+   2.   public static void printinc(int n){
+        
+        if(n==1){
+            System.out.print(n+" ");
+            return ;
+        }
+        printinc(n-1);
+        System.out.print(n+" ");
+        
+         //   printinc(5);
+    }
+    
+    
+    
+  3.    public static int fact(int n){
+        if(n==0){
+            return 1;
+        }
+        int Fnm1=fact(n-1);
+        int fn=n*fact(n-1);
+        return fn;
+        
+         //   System.out.println(fact(5));
+    }
+    
+    
+    
+  4.    public static int fib(int n){
+       if(n==0||n==1){
+           return n;
+       }
+       
+        int fnm1=fib(n-1);
+        int fnm2=fib(n-2);
+        int fn=fnm1+fnm2;
+        return fn;
+        
+        //    System.out.println(fib(5));
+    }
+    
+    
+  5.    public static boolean sorted(int arr[],int i){
+       if(i==arr.length-1){
+           return true;
+       } 
+       
+       if(arr[i] > arr[i+1]){
+           return false;
+       }
+       return sorted(arr,i+1);
+       
+       //  int arr[]={10,20,50,40,50};
+    //   System.out.println(sorted(arr,0));
+    }
+    
+    
+  6.   public static int firstOccurance(int arr[],int key,int i){
+        if(i==arr.length){
+           return -1; 
+        }
+        if(i==arr.length){
+            return -1;
+        }
+        
+        if(arr[i]==key){
+           return i; 
+        }
+        return firstOccurance(arr,key,i+1);
+        
+        //  int arr[]={10,20,50,40,50};
+        //   System.out.println(firstOccurance(arr,50,0));
+    }
+    
+  7.   public static int lastOccurance(int arr[],int key,int i){
+        if(i==arr.length){
+            return -1;
+        }
+        
+        int isfound=lastOccurance(arr,key,i+1);
+        if(isfound==-1&&arr[i]==key){
+            return i;
+        }
+       return isfound; 
+       
+       //  int arr[]={10,20,50,40,50};
+       //    System.out.println(lastOccurance(arr,50,0));
+    }
+    
+    
+    
+ 8.   public static int power(int x,int n){    //o(n)
+        if(n==0){
+           return 1; 
+        }
+        
+        int xnm1=power(x,n-1);
+        int xn=x * xnm1;
+        return xn;
+        
+        // System.out.println(power(2,8));
+    }
+    
+    
+    
+ 9.  public static int optimizedpower(int a,int n){    //olog(n)
+        if(n==0){
+            return 1;
+        }
+        int halfpower=optimizedpower(a,n/2);
+        int halfpowesq=halfpower*halfpower;
+        if(n%2 != 0){
+            halfpowesq=a*halfpowesq;
+        }
+        return halfpowesq;
+        
+        // System.out.println(optimizedpower(2,8));
+    }
+    
+    
+    
+ 10.   public static int tilingproblem(int n){
+        if(n==0||n==1){
+           return 1; 
+        }
+        
+        //vartical
+        int fnm1=tilingproblem(n-1);
+        
+        //horizontal
+        int fnm2=tilingproblem(n-2);
+        
+        int totways=fnm1+fnm2;
+        return totways;
+        
+          // System.out.println(tilingproblem(4));
+    }
+    
+
+
+
+   

@@ -1,0 +1,605 @@
+//1.implemente add,remove method using Array
+//array to implement Queue not preferred reson remove method TimeComplexity is o(n).
+import java.util.*;
+public class Main{
+    static class Queue{
+        static int arr[];
+        static int size;
+        static int rear;
+        
+        Queue(int n){
+            arr=new int[n];
+            size=n;
+            rear=-1;
+        }
+        public static boolean isEmpty(){
+            return rear==-1;
+        }
+        
+        //add o(1)
+        public static void add(int data){
+            if(rear==size-1){
+                System.out.println("Queue is full");
+                return ;
+            }
+            rear=rear+1;
+            arr[rear]=data;
+        }
+        
+        //remove o(n)
+        public static int remove(){
+            if(isEmpty()){
+               System.out.println("empty Queue");
+               return -1;
+            }
+            
+            int front=arr[0];
+            for(int i=0;i<rear;i++){
+                arr[i]=arr[i+1];
+            }
+            rear=rear-1;
+            return front;
+        }
+        
+        //peek o(1)
+        public static int peek(){
+            if(isEmpty()){
+               System.out.println("Empty Queue"); 
+            }
+            return arr[0];
+        }
+    }
+    public static void main(String args[]){
+        Queue q=new Queue(5);
+        
+        q.add(10);
+        q.add(20);
+        q.add(30);
+        q.add(40);
+        
+        while(!q.isEmpty()){
+            System.out.println(q.peek());
+            q.remove();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+//2.implemente add,remove method using Array via Circular Queue
+
+public class Main{
+    static class Queue{
+        static int arr[];
+        static int size;
+        static int rear;
+        static int front;
+        
+        Queue(int n){
+            arr=new int[n];
+            size=n;
+            rear=-1;
+            front=-1;
+        }
+        //Empty the Queue
+        public static boolean isEmpty(){
+            return rear==-1 && front==-1;
+            
+        }
+        //full the Queue
+        public static boolean isFull(){
+            return (rear+1)%size==front;
+            
+        }
+        
+        //add method  o(1)
+        public static void add(int data){
+            if(isFull()){
+              System.out.print("Queue is Full");
+              return;
+            }
+            
+            if(front ==-1){
+                front=0;
+            }
+            rear=(rear+1)%size;
+            arr[rear]=data;
+            }
+            
+            //remove method o(1)
+            public static int remove(){
+                if(isEmpty()){
+                  System.out.print("Queue is empty");  
+                  return -1;
+                }
+                int result=arr[front];
+                
+                if(rear==front){
+                    rear=front=-1;
+                    
+                }else{
+                    front=(front+1)%size;
+                }
+                return result;
+            }
+            
+            //peek o(1)
+            public static int peek(){
+                if(isEmpty()){
+                    System.out.print("Queue is empty");
+                    return -1;
+                }
+                return arr[front];
+            }
+    } 
+    public static void main(String args[]){
+        Queue q=new Queue(4);
+        
+        q.add(10);
+        q.add(20);
+        q.add(30);
+        q.add(40);
+        
+        System.out.println(q.remove());
+        q.add(50);
+        
+        System.out.println(q.remove());
+        q.add(60);
+        
+        while(!q.isEmpty()){
+            System.out.println(q.peek());
+            q.remove();
+        }
+        
+    }
+}
+
+
+
+
+
+
+
+
+//3.implemente add,remove method using LinkedList
+
+public class Main{
+    
+    //Node class
+    static class Node{
+        int data;
+        Node next;
+        
+        Node(int data){
+            this.data=data;
+            this.next=null;
+        }}
+        //Queue class 
+        static class Queue{
+           static Node head=null;
+           static Node tail=null;
+        
+        
+        public static boolean isEmpty(){
+            return head==null & tail==null;
+        }
+        
+        //add o(1)
+        public static void add(int data){
+            Node newNode=new Node(data);
+            if(head==null){
+               head=tail=newNode;
+               return;
+            }
+            tail.next=newNode;
+            tail=newNode;
+        }
+        
+        //Remove o(1)
+        public static int remove(){
+            if(isEmpty()){
+                System.out.println("queue is Empty");
+                return -1;
+            }
+            int front=head.data;
+            
+            if(tail==head){
+                tail=head=null;
+            }else{
+                head=head.next;
+            }
+            return front;
+        }
+        
+        //peek o(1)
+        public static int peek(){
+            if(isEmpty()){
+                System.out.println("queue is empty");
+                return -1;
+            }
+            return head.data;
+        }
+    }
+    public static void main(String args[]){
+        Queue q=new Queue();
+        
+        q.add(10);
+        q.add(20);
+        q.add(30);
+        
+        while(!q.isEmpty()){
+            System.out.println(q.peek());
+            q.remove();
+        } } }
+
+
+
+
+
+
+//4.using java collection framework
+import java.util.*;
+public class Main{
+ public static void main(String args[]){
+     
+    //  Queue<Integer>q=new LinkedList<>();
+    Queue<Integer>q=new ArrayDeque<>();
+     
+     
+     q.add(10);
+     q.add(20);
+     q.add(30);
+     
+     while(!q.isEmpty()){
+         System.out.println(q.peek());
+         q.remove();
+     }
+ }   
+}
+
+
+
+
+
+
+
+
+
+//5.implempent queue using two stack
+import java.util.*;
+public class Main{
+    static class Queue{
+       static Stack<Integer>s1=new Stack<>();
+       static Stack<Integer>s2=new Stack<>();
+        //check is empty
+        public static boolean isEmpty(){
+            return s1.isEmpty();
+        }
+        
+        //add o(n)
+        public static void add(int data){
+            while(!s1.isEmpty()){
+                s2.push(s1.pop());
+                  }
+                  
+                  s1.push(data);
+                  
+                 while(!s2.isEmpty()){
+                     s1.push(s2.pop());
+                     
+                 }  }
+                 
+    //remove o(1)
+    public static int remove(){
+        while(isEmpty()){
+            System.out.println("queue is empty");
+            return -1;
+        }
+        return s1.pop(); }
+    
+    //peek o(1)
+    public static int peek(){
+        while(isEmpty()){
+            System.out.println("queue is empty");
+            return -1;
+        }
+        return s1.peek(); }
+    }
+    
+    public static void main(String args[]){
+        Queue q=new Queue();
+        
+        q.add(10);
+        q.add(20);
+        q.add(30);
+        
+       while(!q.isEmpty()){
+          System.out.println(q.peek());
+          q.remove();
+       } 
+    }
+}
+
+
+
+
+
+
+//6.implement Stack using 2 Queues
+import java.util.*;
+
+public class Main {
+    static class Stack {
+        // Removed 'static' keyword from instance variables
+        Queue<Integer> q1 = new LinkedList<>();
+        Queue<Integer> q2 = new LinkedList<>();
+
+        public boolean isEmpty() {
+            return q1.isEmpty() && q2.isEmpty();
+        }
+
+        // 1. push - O(1)
+        public void push(int data) { 
+            if (!q1.isEmpty()) {
+                q1.add(data);
+            } else {
+                q2.add(data);
+            }
+        }
+
+        // 2. pop - O(n)
+        public int pop() { 
+            if (isEmpty()) {
+                System.out.println("Stack is Empty");
+                return -1; 
+            }
+            int top = -1;
+
+            // case 1
+            if (!q1.isEmpty()) {
+                while (!q1.isEmpty()) {
+                    top = q1.remove();
+                    if (q1.isEmpty()) {
+                        break; 
+                    }
+                    q2.add(top);
+                }
+            // case 2     
+            } else {
+                while (!q2.isEmpty()) {
+                    top = q2.remove();
+                    if (q2.isEmpty()) {
+                        break; 
+                    }
+                    q1.add(top);
+                }
+            }
+            return top;
+        }
+
+        // 3. peek - O(n)
+        public int peek() { 
+            if (isEmpty()) {
+                System.out.println("Stack is empty");
+                return -1; 
+            }
+            int top = -1;
+
+            // case 1
+            if (!q1.isEmpty()) {
+                while (!q1.isEmpty()) {
+                    top = q1.remove();
+                    q2.add(top); 
+                }
+            // case 2
+            } else {
+                while (!q2.isEmpty()) {
+                    top = q2.remove();
+                    q1.add(top); 
+                }
+            }
+            return top;
+        }
+    }
+
+    public static void main(String args[]) {
+        Stack s = new Stack();
+
+        s.push(100);
+        s.push(200);
+        s.push(300);
+
+        
+        while (!s.isEmpty()) {
+            System.out.println(s.peek());
+            s.pop();
+        }
+    }
+}
+
+
+
+
+
+
+
+//7.store and print the Stack value from user  
+import java.util.*;
+public class Main{
+    public static void main(String args[]){
+        Stack<Integer>stack=new Stack<>();
+        Scanner sc=new Scanner(System.in);
+        
+        System.out.println("Enter Num:");
+        for(int i=0;i<2;i++){
+         int stored=sc.nextInt();
+         stack.push(stored);
+        }
+        System.out.println(stack); //optional
+        
+        while(!stack.isEmpty()){
+           System.out.println(stack.peek()); 
+           stack.pop();}
+        
+    } }
+
+
+
+
+
+
+
+
+//8.First non Repeating Letter o(n)
+import java.util.*;
+public class main{
+    public static void FirstNonReapeting(String str){
+        int freq[]=new int[26];   //'a' To 'z'
+        Queue<Character>q=new LinkedList<>();
+        
+        for(int i=0;i<str.length();i++){
+            char ch=str.charAt(i);
+            q.add(ch);
+            freq[ch-'a']++;
+            
+            while(!q.isEmpty() && freq[q.peek()-'a'] >1){
+                q.remove();
+            }
+            
+            if(q.isEmpty()){
+               System.out.print(-1+" "); 
+            }else{
+                System.out.print(q.peek()+" ");
+            }
+        }
+        System.out.println();
+    }
+    public static void main(String args[]){
+        String str="aabccxb";
+        
+        
+        FirstNonReapeting(str);
+    }
+}
+
+
+
+
+
+//9.Interleave 2 Halves of a Queue (even length). 
+//Space-complexity=o(n) , Time-Complexity=o(n)
+import java.util.*;
+public class Main{
+    public static void interLeave(Queue<Integer>q){
+       Queue<Integer>firstHalf=new LinkedList<>();
+       int size=q.size();
+       
+       for(int i=0;i<size/2;i++){
+           firstHalf.add(q.remove());
+       }
+       
+       while(!firstHalf.isEmpty()){
+           q.add(firstHalf.remove());
+           q.add(q.remove());
+       }
+    }
+    
+    public static void main(String args[]){
+        Queue<Integer>q=new LinkedList<>();
+        
+        q.add(1);
+         q.add(2);
+          q.add(3);
+           q.add(4);
+            q.add(5);
+             q.add(6);
+              q.add(7);
+               q.add(8);
+                q.add(9);
+                q.add(10);
+            
+            interLeave(q); 
+            
+            while(!q.isEmpty()){
+            System.out.println(q.peek());
+            q.remove();
+            }
+                
+    }
+}
+
+
+
+
+
+
+
+
+//10.Queue Reversal 
+//Space & Time-complexity=o(n)
+import java.util.*;
+public class Main{
+    public static void Reversal(Queue<Integer>q){
+        Stack<Integer>s=new Stack<>();
+        
+        while(!q.isEmpty()){
+            int popQ=q.remove();
+            s.push(popQ);
+        }
+        
+        while(!s.isEmpty()){
+            int popS=s.pop();
+            q.add(popS);
+        }
+    }
+    public static void main(String args[]){
+        Queue<Integer>q=new LinkedList<>();
+        
+        q.add(1);
+        q.add(2);
+        q.add(3);
+        q.add(4);
+        q.add(5);
+        
+      Reversal(q);  //function call
+      
+      while(!q.isEmpty()){
+          System.out.println(q.peek());
+          q.remove();
+      }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+//11.Deque via LinkedList
+import java.util.Deque;
+import java.util.LinkedList;
+
+public class Main {
+    public static void main(String[] args) {
+        
+        Deque<Integer> deque = new LinkedList<>();
+
+        // 1. Add to both sides
+        deque.addLast(10);  
+        deque.addFirst(5);  
+        deque.addLast(20); 
+ 
+        // 2. Remove from both sides
+        deque.removeFirst(); // Removes 5 -> [10, 20]
+        deque.removeLast();  // Removes 20 -> [10]
+    }
+}

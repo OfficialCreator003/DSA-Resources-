@@ -1,0 +1,535 @@
+//1.Detected cycle exit or Not
+import java.util.*;
+public class Main {
+    static class edge {
+        int src;
+        int dest;
+        
+        public edge(int s, int d) {
+            this.src = s;
+            this.dest = d;
+        }
+    }
+        
+    static void GraphCreate(ArrayList<edge> graph[]) {
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<>();
+        }
+            
+        graph[0].add(new edge(0, 1));
+        graph[0].add(new edge(0, 2));
+        graph[0].add(new edge(0, 3));
+          
+        graph[1].add(new edge(1, 0));
+        graph[1].add(new edge(1, 2));
+       
+        graph[2].add(new edge(2, 0));
+        graph[2].add(new edge(2, 1));
+         
+        graph[3].add(new edge(3, 0));
+        graph[3].add(new edge(3, 4));
+          
+        graph[4].add(new edge(4, 3));  
+    }
+          
+    // main function for detect-Cycle        
+    public static boolean dectectCycle(ArrayList<edge> graph[]) {
+        boolean vist[] = new boolean[graph.length];
+        for (int i = 0; i < graph.length; i++) {
+            if (!vist[i]) {
+                if (detectCycleUtil(graph, vist, i, -1)) {
+                    return true; // cycle exists in one of the parts
+                }
+            }
+        }
+        return false;
+    }  
+           
+    // helper function for detect-Cycle            
+    public static boolean detectCycleUtil(ArrayList<edge> graph[], boolean vist[], int curr, int par) {
+        vist[curr] = true;
+    
+        for (int i = 0; i < graph[curr].size(); i++) {
+            edge e = graph[curr].get(i); 
+      
+            // case 3: Neighbor is not visited  
+            if (!vist[e.dest]) {
+                if (detectCycleUtil(graph, vist, e.dest, curr)) {
+                    return true;
+                }
+            }
+            // case 1: Neighbor is visited and it is NOT the parent (Cycle detected!)
+            else if (vist[e.dest] && e.dest != par) {
+                return true; 
+            }
+            // case 2: Neighbor is visited and it IS the parent -> do nothing
+        }
+        return false;
+    }           
+           
+    public static void main(String args[]) {
+        int v = 5;
+        
+        @SuppressWarnings("unchecked")
+        ArrayList<edge> graph[] = new ArrayList[v];
+        GraphCreate(graph);
+        
+        System.out.println(dectectCycle(graph)); 
+    }}
+
+
+
+
+
+
+
+//2.check Bipartite Graph: (if graph doesn't have cycle is called Bipartite graph).
+//TC :- o(v+e)
+import java.util.*;
+public class Main{
+    //edge class
+    static class edge{
+        int src;
+        int dest;
+        
+        public edge(int s,int d){
+            this.src=s;
+            this.dest=d;
+        }}
+      //create graph function  
+    static void CreateGraph(ArrayList<edge>graph[]){
+        for(int i=0;i<graph.length;i++){
+            graph[i]=new ArrayList<>();
+        }
+    
+    graph[0].add(new edge(0,1));
+    graph[0].add(new edge(0,2));
+    
+    graph[1].add(new edge(1,0));
+    graph[1].add(new edge(1,3));
+    
+    graph[2].add(new edge(2,0));
+    graph[2].add(new edge(2,4));
+    
+    graph[3].add(new edge(3,1));
+    graph[3].add(new edge(3,4));
+    
+    graph[4].add(new edge(4,2));
+    graph[4].add(new edge(4,3));
+    }
+    
+    //checked Bipartite graph
+    public static boolean BipartiteGraph(ArrayList<edge>graph[]){
+        int colour[]=new int[graph.length];
+        for(int i=0;i<colour.length;i++){
+            colour[i]=-1;  //no colour
+        }
+        
+        Queue<Integer>q=new LinkedList<>();
+        
+        for(int i=0;i<graph.length;i++){
+            if(colour[i]==-1){ //BFS
+                q.add(i);
+                colour[i]=0;  //yellow
+                if(!q.isEmpty()){
+                    int current=q.remove();
+             for(int j=0;j<graph[current].size();j++){
+                        edge e=graph[current].get(j);
+                        if(colour[e.dest]==-1){
+                            int nextColour=colour[current]==0 ? 1: 0;
+                            colour[e.dest]=nextColour;
+                            q.add(e.dest);
+                        }else if(colour[e.dest]==colour[current]){
+                            return false;
+                        }    }}}}
+        return true;
+    }
+    public static void main(String args[]){
+        int v=7;
+        @SuppressWarnings("unchecked")
+        ArrayList<edge>graph[]=new ArrayList[v];
+        CreateGraph(graph);
+        
+        System.out.println(BipartiteGraph(graph));
+    }}
+
+
+
+
+
+
+
+
+
+
+
+//3. Cycle Detection in Directed graph-DFS   
+//TC: o(v+e)
+
+import java.util.*;
+
+public class Main {
+    static class edge {
+        int src;
+        int dest;
+        
+        public edge(int s, int d) {
+            this.src = s;
+            this.dest = d;
+        } 
+    }
+        
+    static void createGraph(ArrayList<edge> graph[]) {
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        graph[0].add(new edge(0, 2));
+        graph[1].add(new edge(1, 0));
+        graph[2].add(new edge(2, 3)); 
+        graph[3].add(new edge(3, 0));  
+    }
+     //main function for cycle detection  
+    public static boolean isCycle(ArrayList<edge> graph[]) {
+        boolean vist[] = new boolean[graph.length];
+        boolean stack[] = new boolean[graph.length];
+     
+        for (int i = 0; i < graph.length; i++) {
+            if (!vist[i]) {
+                if (isCycleUtil(graph, i, vist, stack)) {
+                    return true;
+                }
+            }
+        }
+        return false; 
+    }
+   //helper function for cycle detection  
+    public static boolean isCycleUtil(ArrayList<edge> graph[], int current, boolean vist[], boolean stack[]) {
+        vist[current] = true;
+        stack[current] = true; 
+    
+       
+        for (int i = 0; i < graph[current].size(); i++) {
+            edge e = graph[current].get(i);
+            
+            // If neighbor is already in the current recursion stack, cycle found!
+            if (stack[e.dest]) {
+                return true; 
+            }
+           
+            if (!vist[e.dest] && isCycleUtil(graph, e.dest, vist, stack)) {
+                return true;
+            } 
+        }
+        
+        stack[current] = false; // Backtrack: remove from recursion stack
+        return false;
+    }     
+    
+    public static void main(String args[]) {
+        int v = 7;
+        @SuppressWarnings("unchecked")
+        ArrayList<edge> graph[] = new ArrayList[v];
+        createGraph(graph);
+        
+        System.out.println(isCycle(graph));
+    }}
+
+
+
+
+
+
+
+
+//4.Topological sorting using DFS o(o+v)
+//you write a code edge and graph then apply this sort
+    public static void TopologicalSort(ArrayList<edge>graph[]){
+        boolean vist[]=new boolean[graph.length];
+        
+        Stack<Integer>s=new Stack<>();
+        
+        for(int i=0;i<graph.length;i++){
+            if(!vist[i]){
+                TopologicalSortUtil(graph,i,vist,s); //modify dfs function
+            }
+            
+            while(!s.isEmpty()){
+                System.out.print(s.pop()+" ");
+            }}}
+            
+    //helper function for topological sorting using DFS
+    public static void TopologicalSortUtil(ArrayList<edge>graph[],int current,boolean vist[],Stack<Integer>s){
+        vist[current]=true;
+        
+        for(int i=0;i<graph[current].size();i++){
+            edge e=graph[current].get(i);
+            if(!vist[e.dest]){
+                TopologicalSortUtil(graph,e.dest,vist,s);
+            }}
+        s.push(current);}
+ 
+
+
+
+
+
+
+
+
+//5.Topological sorting using BFS o(o+v)
+//you write a code edge and graph then apply this sort
+
+public static void calcInDegree(ArrayList<edge>graph[],int inDegree[]){
+   for(int i=0;i<graph.length;i++){
+       int v=i;
+       for(int j=0;j<graph[v].size();j++){
+           edge e=graph[v].get(j);
+           inDegree[e.dest]++;
+       } } }
+   
+ //main function for topological sorting using BFS    
+public static void TopoLogicalSort(ArrayList<edge>graph[]){
+    int inDegree[]=new int[graph.length];
+    calcInDegree(graph, inDegree);
+    Queue<Integer>q=new LinkedList<>();
+    
+    for(int i=0;i<inDegree.length;i++){
+        if(inDegree[i]==0){
+            q.add(i);
+        }}
+        
+        //bfs
+while(!q.isEmpty()){
+    int current=q.remove();
+    System.out.println(current+" ");
+
+ for(int i=0;i<graph[current].size();i++){
+     edge e=graph[current].get(i);
+     inDegree[e.dest]--;
+     if(inDegree[e.dest]==0){
+         q.add(e.dest);
+     }}}}
+
+
+
+
+
+
+
+
+
+
+//6.print All path from Source to Target  [exponential TC: o(V^V)]
+//you write a code edge and graph then apply this print all path
+
+ public static void AllPath(ArrayList<edge> graph[], int src, int dest, String path) {
+
+ // Base case: if we reach the destination, print the path + final destination
+        if (src == dest) {
+           System.out.println(path + dest); 
+           return;
+        }
+        
+        for (int i = 0; i < graph[src].size(); i++) {
+            edge e = graph[src].get(i);
+            
+            AllPath(graph, e.dest, dest, path + src + " -> ");
+        }}    
+    
+ //Main Funtion
+    public static void main(String args[]) {
+        int v = 6;
+        @SuppressWarnings("unchecked")
+        ArrayList<edge> graph[] = new ArrayList[v];
+        CreateGraph(graph);
+        
+        int src = 5;
+        int dest = 1;
+        
+        System.out.println("Paths from " + src + " to " + dest + ":");
+        AllPath(graph, src, dest, "");
+    }
+
+
+
+
+
+
+
+
+
+//7. Dijkstra's algorithm 
+//you write a code edge and graph then apply this Dijkstra's algorithm 
+//with PQ TC: V+E(logV)
+//without PQ TC o(V^2)
+
+//this is a helper function for Dijkstra's 
+static class pair implements Comparable<pair>{
+    int n;
+    int path;
+    
+    public pair(int n,int p){
+        this.n=n;
+        this.path=p;
+    }
+    
+    @Override
+    public int compareTo(pair p2){
+        return this.path-p2.path;  //path based sorting for my pairs
+    }}
+   
+ //dijkstra algoritm main function   
+public static void dijkstra(ArrayList<edge>graph[],int src){
+    int dist[]=new int[graph.length];
+    for(int i=0;i<graph.length;i++){
+        if(i != src){
+            dist[i]=Integer.MAX_VALUE;  // +infinity
+        }}
+        
+boolean vist[]=new boolean[graph.length];
+PriorityQueue<pair>pq=new PriorityQueue<>();
+pq.add(new pair(src,0));
+
+//Loop
+while(!pq.isEmpty()){
+    pair current=pq.remove();
+    if(!vist[current.n]){
+        vist[current.n]=true;
+        
+        //neighbours
+        for(int i=0;i<graph[current.n].size();i++){
+            edge e=graph[current.n].get(i);
+            int u=e.src;
+            int v=e.dest;
+            int wt=e.wt;
+            
+if (dist[u] != Integer.MAX_VALUE && dist[u] + wt < dist[v]) { 
+            dist[v] = dist[u] + wt; 
+            pq.add(new pair(v, dist[v])); }
+        }}}
+        
+    //print all vertices
+    for (int i = 0; i < dist.length; i++) {
+            System.out.print(dist[i] + " ");
+        }}  
+        
+//main function        
+    public static void main(String args[]){
+        int v=6;
+        @SuppressWarnings("unchecked")
+        ArrayList<edge>graph[]=new ArrayList[v];
+        createGraph(graph);
+        
+        int src=0;
+        dijkstra(graph,src); }
+
+
+
+
+
+
+
+
+
+
+//bellmen-Ford algorithm 
+//you write a code edge and graph then apply this bellmen-Ford algorithm 
+//TC :- o(V*E)
+public static void bellmenFord(ArrayList<edge>graph[],int src){
+    int dist[]=new int[graph.length];
+    for(int i=0;i<graph.length;i++){
+        if(i != src){
+           dist[i]=Integer.MAX_VALUE; 
+        }}
+        
+        int l=graph.length;
+        for(int i=0;i<l-1;i++){
+            for(int j=0;j<l;j++){
+                for(int k=0;k<graph[j].size();k++){
+                    edge e=graph[j].get(k);
+                    
+                    int u=e.src;
+                    int v=e.dest;
+                    int wt=e.wt;
+  //relaxation                  
+if(dist[u] != Integer.MAX_VALUE && dist[u] + wt < dist[v]){
+             dist[v]=dist[u]+wt;           
+                    }}}}
+//print                     
+    for(int i=0;i<dist.length;i++){
+        System.out.print(dist[i]+" ");
+    }
+}  
+                    
+//main function                    
+    public static void main(String args[]){
+       int v=5;
+       @SuppressWarnings("unchecked")
+       ArrayList<edge>graph[]=new ArrayList[v];
+       createGraph(graph);
+       
+       bellmenFord(graph,0);
+    }
+
+
+
+
+
+
+
+
+//prims algorithm 
+//you write a code edge and graph then apply this prims algorithm 
+//TC :- o(ElogE)
+
+
+//helper function
+static class pair implements Comparable<pair>{
+    int v;
+    int cost;
+    
+    public pair(int v,int c){
+        this.v=v;
+        this.cost=c;
+    }
+    
+    @Override
+    public int compareTo(pair p2){
+        return this.cost - p2.cost;
+    }}
+public static void prims(ArrayList<edge>graph[]){
+    boolean vist[]=new boolean[graph.length];
+    PriorityQueue<pair>pq=new PriorityQueue<>();
+    pq.add(new pair(0,0));
+    int finalCost=0;
+    
+    while(!pq.isEmpty()){
+        pair current=pq.remove();
+        if(!vist[current.v]){
+           vist[current.v]=true;
+           finalCost += current.cost;
+           
+for(int i=0;i<graph[current.v].size();i++){
+ edge e=graph[current.v].get(i);
+ pq.add(new pair(e.dest,e.wt));
+}}}
+    System.out.print("Final cost of MST:"+finalCost);
+}
+
+//main function
+    public static void main(String args[]){
+       int v=5;
+       @SuppressWarnings("unchecked")
+       ArrayList<edge>graph[]=new ArrayList[v];
+       createGraph(graph);
+    prims(graph);   }
+
+
+
+
+
+
+
+
+
+

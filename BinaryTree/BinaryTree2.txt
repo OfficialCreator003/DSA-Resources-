@@ -1,0 +1,299 @@
+//1.Calculate Diameter o(N^2)  
+//NOTE:- make function Node and height then calculates Diameter
+
+
+public static int diamiter(Node root){
+    if(root==null){
+       return 0; 
+    }
+    
+    int LD=diamiter(root.left);
+    int LH=height(root.left);
+    int RD=diamiter(root.right);
+    int RH=height(root.right);
+    int selfD=LH+RH;
+    int store=Math.max(selfD, Math.max(RD,LD));
+    
+    return store;
+    
+    
+}            
+    public static void main(String args[]){
+        Node root=new Node(10);
+        root.left=new Node(11);
+        root.left.left=new Node(12);
+        root.right=new Node(13);
+        
+        
+        System.out.println(diamiter(root));  }}
+
+
+
+
+
+
+//2.Calculate Diameter o(N)  
+
+public class Main{
+    static class Node{
+        int data;
+        Node left;
+        Node right;
+        
+        public  Node(int data){
+            this.data=data;
+            this.right=null;
+            this.left=null; } }
+            
+           
+static class info{
+    int diamiter;
+    int height;
+    
+    public info(int diamiter,int height){
+        this.diamiter=diamiter;
+        this.height=height;
+    } }
+    
+    public static info Diameter(Node root){
+        if(root==null){
+            return new info(0,0); }
+            
+            info Li=Diameter(root.left);
+            info Ri=Diameter(root.right);
+            
+           int Dia= Math.max(Math.max(Ri.diamiter,Li.diamiter), Li.height+Ri.height +1 );
+            int hei=Math.max(Ri.height,Li.height)+1;
+            
+            return new info(Dia,hei);
+    }
+    
+    
+    public static void main(String args[]){
+        Node root=new Node(1);
+        root.left=new Node(2);
+        root.right=new Node(3);
+        root.left.left=new Node(4);
+        root.left.right=new Node(5);
+        root.right.left=new Node(6);
+        root.right.right=new Node(7);
+        
+        System.out.println(Diameter(root).diamiter);
+    } }
+
+
+
+
+//3.Calculate Diameter o(N)  
+
+public class Main {
+    static class Node {
+        int data;
+        Node left, right;
+        public Node(int data) {
+            this.data = data;
+            this.left = this.right = null;
+        } }
+    static class Info {
+        int diameter;
+        int height;
+        public Info(int diameter, int height) {
+            this.diameter = diameter;
+            this.height = height;
+        } }
+
+    public static Info calculateDiameter(Node root) {
+        if (root == null) {
+            return new Info(0, 0);
+        }
+        Info Li = calculateDiameter(root.left);
+        Info Ri = calculateDiameter(root.right);
+
+        // 1. Calculate height of current node
+        int ht = Math.max(Li.height, Ri.height) + 1;
+
+        // 2. Calculate diameter passing THROUGH the current root
+        int selfDia = Li.height + Ri.height + 1;
+
+        // 3. Final diameter is the max of (Left subtree, Right subtree, or self)
+        int finalDia = Math.max(selfDia, Math.max(Li.diameter, Ri.diameter));
+
+        // 4. Return in the correct order: (diameter, height)
+        return new Info(finalDia, ht);
+    }
+
+    public static void main(String args[]) {
+        Node root = new Node(1);
+        root.left = new Node(2);
+        root.right = new Node(3);
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+        root.right.left = new Node(6);
+        root.right.right = new Node(7);
+
+        Info result = calculateDiameter(root);
+        System.out.println("Diameter: " + result.diameter);
+        System.out.println("Height: " + result.height);
+    }
+}
+
+
+
+
+
+
+//4.Subtree of another Tree
+//Given the roots of two binary trees root and subRoot, return true if there is a subtree of root
+with the same structure and node values of subRoot and false otherwise.
+
+
+public class Main {
+    static class Node {
+        int data;
+        Node left;
+        Node right;
+
+        public Node(int data) {
+            this.data = data;
+            this.left = null;
+            this.right = null;
+        }
+    }
+
+    // Helper Function: Checks if two trees are exactly the same
+    public static boolean isIdentical(Node node, Node subRoot) {
+        if (node == null && subRoot == null) {
+            return true;
+        } else if (node == null || subRoot == null || node.data != subRoot.data) {
+            return false;
+        }
+
+        // Check if both left and right subtrees are also identical
+        return isIdentical(node.left, subRoot.left) && isIdentical(node.right, subRoot.right);
+    }
+
+    // Main Function: Checks if subroot exists anywhere in the main root
+    public static boolean isSubtree(Node root, Node subroot) {
+        if (root == null) {
+            return false;
+        }
+
+        // If data matches, check if the trees are identical starting from here
+        if (root.data == subroot.data) {
+            if (isIdentical(root, subroot)) {
+                return true;
+            }
+        }
+
+        // Otherwise, search in the left and right children
+        return isSubtree(root.left, subroot) || isSubtree(root.right, subroot);
+    }
+
+    public static void main(String args[]) {
+        // Main Tree
+        Node root = new Node(1);
+        root.left = new Node(2);
+        root.right = new Node(3);
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+        root.right.left = new Node(6);
+        root.right.right = new Node(7);
+
+        // Subtree to find
+        Node subroot = new Node(2);
+        subroot.left = new Node(4);
+        subroot.right = new Node(5);
+
+        // Printing the result
+        if (isSubtree(root, subroot)) {
+            System.out.println("True");
+        } else {
+            System.out.println("False");
+        } }}
+
+
+
+
+
+
+
+//5.TopView
+
+import java.util.*;
+public class Main{
+ static class Node{
+     int data;
+     Node left;
+     Node right;
+     
+    public Node(int data){
+         this.data=data;
+         this.left=null;
+         this.right=null; } }
+         
+static class Info{
+    int hd;
+    Node node;
+    
+    public Info(Node node,int hd){
+        this.node=node;
+        this.hd=hd;
+    } }
+    
+    public static void TopView(Node root){
+        //Level Order 
+        Queue<Info>q=new LinkedList<>();
+        HashMap<Integer,Node>map=new HashMap<>();
+        
+        int max=0;
+        int min=0;
+        
+        q.add(new Info(root,0));
+        q.add(null);
+        
+        while(!q.isEmpty()){
+            Info curr=q.remove();
+            if(curr==null){
+                if(q.isEmpty()){
+                   break; 
+                }else{
+                    q.add(null);
+            continue; // CRITICAL: Skip the rest of the loop for null        
+                } }
+
+    if(!map.containsKey(curr.hd)){
+        map.put(curr.hd,curr.node);
+    }   
+    
+    if(curr.node.left!=null){
+       q.add(new Info(curr.node.left, curr.hd-1)); 
+        min=Math.min(min,curr.hd-1);
+    }
+    
+    if(curr.node.right!=null){
+        q.add(new Info(curr.node.right, curr.hd+1));
+         max=Math.max(max,curr.hd+1);}
+    
+        }
+    for(int i=min;i<=max;i++){
+      System.out.println(map.get(i).data+" ");  
+    }
+    }
+    public static void main(String args[]){
+        Node root=new Node(1);
+        root.left=new Node(2);
+        root.right=new Node(3);
+        root.left.left=new Node(4);
+        root.left.right=new Node(5);
+        root.right.left=new Node(6);
+        root.right.right=new Node(7);
+        
+        
+        TopView(root);
+    } }
+
+
+
+
+
+

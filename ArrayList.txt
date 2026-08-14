@@ -1,0 +1,404 @@
+//ArrayList 
+
+import java.util.ArrayList;
+public class Main{
+    public static void main(String args[]){
+        ArrayList<Integer>list1=new ArrayList<>();
+        
+        //add element o(1)
+        list1.add(10);
+        list1.add(20);
+        list1.add(30);
+        list1.add(40);
+        
+        //particular index nub add  o(n)
+        list1.add(3,200);   
+        
+        //remove o(n)
+        list1.remove(0);
+        System.out.println(list1);
+        
+        //get elemen  o(1)
+        int element=list1.get(2);
+        System.out.println(element);
+        
+        //set element  o(n)
+        list1.set(1,100);
+        System.out.println(list1);
+        
+        //contains element(check element exit or not) o(n)
+        System.out.println(list1.contains(100));
+        System.out.println(list1.contains(90));
+        
+        
+        //size
+        System.out.println(list1.size());
+        
+        //iterate of ArrayList
+        for(int i=0;i<list1.size();i++){
+        System.out.print( list1.get(i)  +" " );
+        }
+        
+       System.out.println();
+        
+        //reverse the ArrayList o(n)
+        for(int i=list1.size()-1;i>=0;i--){
+            System.out.print((list1.get(i)) +" " );
+        }
+            
+            System.out.println();
+            
+            //Max number  o(n)
+            int max=Integer.MIN_VALUE;
+            for(int i=0;i<=list1.size();i++){
+    //OR:-max=Math.max(max,list1.get(i));            
+              if(max<list1.get(i)){
+                  max=list1.get(i);
+              } 
+               System.out.println(max);
+            }
+            
+        
+        
+    }
+}
+
+
+
+//swap the ArrayList
+import java.util.ArrayList;
+
+public class Main {
+    // Swapping ArrayList elements
+    public static void swap(ArrayList<Integer> list, int index1, int index2) {
+        // 1. Store the value of the first index in a temp variable
+        int temp = list.get(index1);
+        
+        // 2. Set the first index to the value of the second index
+        list.set(index1, list.get(index2));
+        
+        // 3. Set the second index to the value stored in temp
+        list.set(index2, temp);
+    }
+    
+    public static void main(String args[]) {
+        ArrayList<Integer> list = new ArrayList<>();
+        
+        // Add the elements
+        list.add(10);
+        list.add(19);
+        
+        System.out.println("Before Swap: " + list);
+        
+        int idx1 = 0, idx2 = 1;
+        
+        swap(list, idx1, idx2);
+        
+        System.out.println("After Swap: " + list);
+    }
+}
+
+
+
+//Sort the ArrayList
+import java.util.ArrayList;
+import java.util.Collections;
+public class main{
+     public static void main(String args[]){
+        ArrayList<Integer>list1=new ArrayList<>();
+        
+        list1.add(10);
+        list1.add(100);
+        list1.add(15);
+        list1.add(170);
+        
+         //sort ascending 
+        Collections.sort(list1);
+        System.out.print(list1);
+        
+        //sort Descending 
+        Collections.sort(list1,Collections.reverseOrder());
+        System.out.print(list1);
+    }
+}
+
+
+
+
+//2D ArrayList
+import java.util.ArrayList;
+public class Main{
+    public static void main(String args[]){
+        ArrayList<ArrayList<Integer>>mainlist=new ArrayList<>();
+        
+        ArrayList<Integer>list1=new ArrayList<>();
+        list1.add(10);
+        list1.add(20);
+        mainlist.add(list1);
+        
+        
+        ArrayList<Integer>list2=new ArrayList<>();
+        list2.add(1);
+        list2.add(2);
+        mainlist.add(list2);
+        
+        for(int i=0;i<mainlist.size();i++){
+          ArrayList<Integer>currentlist=mainlist.get(i);
+          for(int j=0;j<currentlist.size();j++){
+              System.out.print(currentlist.get(j)+" ");
+          }
+          System.out.println();
+        }
+    }
+}
+
+
+
+
+
+
+
+//print the table 
+import java.util.ArrayList;
+public class Main{
+    public static void main(String args[]){
+        ArrayList<ArrayList<Integer>>mainlist=new ArrayList<>();
+        
+        ArrayList<Integer>list1=new ArrayList<>();
+        ArrayList<Integer>list2=new ArrayList<>();
+        ArrayList<Integer>list3=new ArrayList<>();
+        
+        for(int i=1;i<=5;i++){
+            list1.add(i*1);
+            list2.add(i*2);
+            list3.add(i*3);
+        }
+            
+            mainlist.add(list1); //1 2 3 4 5
+            mainlist.add(list2); //2 4 6 8 10
+            mainlist.add(list3); //3 6 9 12 15
+            
+            System.out.println(mainlist);
+        
+    }
+}
+
+
+
+
+
+
+
+//Container with Most Water (o(n^2))
+import java.util.ArrayList;
+public class main{
+    public static int storedWatter(ArrayList<Integer>height){
+        int maxWater=0;
+        
+        //brute force
+        for(int i=0;i<height.size();i++){
+            for(int j=i+1;j<height.size();j++){
+                int ht=Math.min(height.get(i),height.get(j));
+                int width=j-1;
+                int currWater=ht*width;
+                maxWater=Math.max(maxWater,currWater);
+            } }
+            return maxWater;
+    }
+    public static void main(String args[]){
+        ArrayList<Integer>height=new ArrayList<>();
+        
+        height.add(1);
+        height.add(8);
+        height.add(6);
+        height.add(2);
+        height.add(5);
+        height.add(4);
+        height.add(8);
+        height.add(3);
+        height.add(7);
+        
+        System.out.println(storedWatter(height));
+    }
+}
+
+
+
+
+
+
+//Container with Most Water  (o(n)) Two pointer Approach
+import java.util.ArrayList;
+public class main{
+    public static int storedWatter(ArrayList<Integer>height){
+       int maxWater=0;
+       int lp=0;
+       int rp=height.size()-1;
+        
+        //2 pointer approach
+        while(lp<rp){
+            //calculate Water area
+            int ht=Math.min(height.get(lp),height.get(rp));
+            int width=rp-lp;
+            int currWater=ht*width;
+            maxWater=Math.max(maxWater,currWater);
+            
+            //update ptr
+            if(height.get(lp)<height.get(rp)){
+                lp++;
+            }else{
+                rp--;
+            }
+        }
+       return maxWater;
+    }
+    public static void main(String args[]){
+        ArrayList<Integer>height=new ArrayList<>();
+        
+        height.add(1);
+        height.add(8);
+        height.add(6);
+        height.add(2);
+        height.add(5);
+        height.add(4);
+        height.add(8);
+        height.add(3);
+        height.add(7);
+        
+        System.out.println(storedWatter(height));
+    }
+}
+
+
+
+
+
+//pair sum (brute-force)
+import java.util.ArrayList;
+public class main{
+   public static boolean pairSum(ArrayList<Integer>list,int target){
+       
+       for(int i=0;i<list.size();i++){
+          for(int j=i+1;j<list.size();j++){
+              if(list.get(i)+list.get(j)==target){
+                  return true;
+              }
+          } 
+       }
+       return false;
+   }
+    public static void main(String args[]){
+        ArrayList<Integer>list=new ArrayList<>();
+        
+       list.add(1);
+       list.add(2);
+       list.add(3);
+       list.add(4);
+       list.add(5);
+       list.add(6);
+       
+       int target=5;
+        
+        System.out.println(pairSum(list,target));
+    }
+}
+
+
+
+
+
+
+
+//pair sum (Two pointer Approach)
+import java.util.ArrayList;
+public class main{
+   public static boolean pairSum(ArrayList<Integer>list,int target){
+       int lp=0;
+       int rp=list.size()-1;
+       
+       while(lp!=rp){
+           
+           //case 1
+           if(list.get(lp)+list.get(rp)==target){
+             return true;  
+           }
+           
+           //case 2
+           if(list.get(lp)+list.get(rp)<target){
+               lp++;
+               
+           }else{
+               //case 4
+               rp--;
+           }
+       }
+       return false;
+   }
+    public static void main(String args[]){
+        ArrayList<Integer>list=new ArrayList<>();
+        
+       list.add(1);
+       list.add(2);
+       list.add(3);
+       list.add(4);
+       list.add(5);
+       list.add(6);
+       
+       int target=5;
+        
+        System.out.println(pairSum(list,target));
+    }
+}
+
+
+
+
+
+//pair sum 2 ( Two pointer Approach o(n) )
+import java.util.ArrayList;
+public class main{
+    public static boolean pair2(ArrayList<Integer>list,int target){
+        int bp= -1;
+        int n=list.size();
+        
+        for(int i=0;i<list.size();i++){
+            if(list.get(i)>list.get(i+1)){  //braking point
+                bp=i;
+                break;
+            } }
+            
+            int lp=bp+1; //smallest
+            int rp=bp;  //greatest
+            
+            while(lp != rp){
+            //case 1
+            if(list.get(lp)+list.get(rp)==target){
+                return true; }
+                //case 2
+                if(list.get(lp)+list.get(rp)<target){
+                    lp=(lp+1)%n; }
+                    //case 3
+                    else{
+                        rp=(n+rp-1)%n;
+                    }
+            
+            }
+            
+         return false;   
+    }
+    public static void main(String args[]){
+        ArrayList<Integer>list=new ArrayList<>();
+        
+        list.add(11);
+        list.add(15);
+        list.add(6);
+        list.add(8);
+        list.add(9);
+        list.add(10);
+        
+        int target=16;
+        
+        System.out.println(pair2(list,target));
+    }
+}
+

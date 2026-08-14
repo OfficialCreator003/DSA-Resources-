@@ -1,0 +1,303 @@
+//1.chieapest flights within k stops
+import java.util.*;
+
+public class Main {
+    static class edge {
+        int src;
+        int dest;
+        int wt;
+        
+        public edge(int s, int d, int w) {
+            this.src = s;
+            this.dest = d;
+            this.wt = w;
+        }
+    }
+        
+    public static void createGraph(int flight[][], ArrayList<edge> graph[]) {
+        for (int i = 0; i < graph.length; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        
+        for (int i = 0; i < flight.length; i++) {
+            int src = flight[i][0];
+            int dest = flight[i][1];
+            int wt = flight[i][2];
+            
+            edge e = new edge(src, dest, wt);
+            graph[src].add(e);
+        }
+    }
+    
+    static class info {
+        int v;
+        int cost;
+        int stops;
+        
+        public info(int v, int c, int s) {
+            this.v = v;
+            this.cost = c;
+            this.stops = s;
+        }
+    }
+        
+    public static int CheapestFlights(int n, int flights[][], int src, int dest, int k) {
+        @SuppressWarnings("unchecked")
+        ArrayList<edge> graph[] = new ArrayList[n];
+        createGraph(flights, graph);
+        
+        int dist[] = new int[n];
+        for (int i = 0; i < n; i++) {
+            if (i != src) {
+                dist[i] = Integer.MAX_VALUE;
+            }
+        }
+        
+        Queue<info> q = new LinkedList<>();
+        q.add(new info(src, 0, 0)); 
+        
+        while (!q.isEmpty()) {
+            info curr = q.remove();
+            if (curr.stops > k) {
+                continue; 
+            }
+          
+            for (int i = 0; i < graph[curr.v].size(); i++) {
+                edge e = graph[curr.v].get(i);
+                int u = e.src;
+                int v = e.dest;
+                int wt = e.wt;
+                if (curr.cost + wt < dist[v]) {
+                    dist[v] = curr.cost + wt;
+                    q.add(new info(v, dist[v], curr.stops + 1));
+                } 
+            }
+        } 
+        if (dist[dest] == Integer.MAX_VALUE) {
+            return -1;   
+        } else {
+            return dist[dest];
+        }
+    }        
+    
+    public static void main(String args[]) {
+        int n = 4;
+        int flight[][] = {{0, 1, 100}, {1, 2, 100}, {2, 0, 100}, {1, 3, 600}, {2, 3, 200}};
+        int src = 0, dest = 3, k = 1;
+        System.out.println(CheapestFlights(n, flight, src, dest, k));
+    }}
+
+
+
+
+
+
+
+
+
+
+
+//2.connecting cites
+import java.util.*;
+public class Main{
+    static class edge implements Comparable<edge>{
+        int dest;
+        int cost;
+        
+        public edge(int d,int c){
+            this.dest=d;
+            this.cost=c;
+        }
+        
+        @Override
+        public int compareTo(edge e2){
+            return this.cost-e2.cost; //ascending order sort
+        }}
+        
+      public static int connectCites(int cites[][]){
+          PriorityQueue<edge> pq = new PriorityQueue<>();
+          boolean vist[]=new boolean[cites.length];
+          
+          pq.add(new edge(0,0));
+          int finalCost=0;
+          
+          while(!pq.isEmpty()){
+             edge current=pq.remove();
+             if(!vist[current.dest]){
+                vist[current.dest]=true;
+                finalCost+=current.cost;
+                
+                for(int i=0;i<cites[current.dest].length;i++){
+                    if(cites[current.dest][i] != 0){
+                        pq.add(new edge(i, cites[current.dest][i]));
+                    }}}}
+          return finalCost;
+      }
+    public static void main(String args[]){
+       int cites[][]={{0,1,2,3,4},{1,0,5,0,7},{2,5,0,6,0},{3,0,6,0,0},{4,7,0,0,0}}; 
+       
+       System.out.println(connectCites(cites));
+    }
+}
+
+
+
+
+
+
+
+
+
+//3.Dis-Joint set Union
+//TC:- o(4k) but consider o(1)
+import java.util.*;
+public class Main{
+    static int n=7;
+    static int par[]=new int[n];
+    static int rank[]=new int[n];
+    
+    public static void init(){
+        for(int i=0;i<n;i++){
+         par[i]=i;  
+        }}
+    
+    public static int find(int x){
+        if(x==par[x]){
+            return x;
+        } 
+        return find(par[x]);
+    }
+    
+    public static void union(int A,int B){
+        int parA=find(A);
+        int parB=find(B);
+        
+        if(rank[parA]==rank[parB]){
+            par[B]=par[A];
+            rank[parA]++;
+            }else if(rank[parA] < rank[parB]){
+                par[parA]=par[parB];
+            }else{
+                par[parB]=par[parA];
+            } }
+        
+    public static void main(String args[]){
+     init();
+     System.out.println(find(3));
+     union(1,3);
+     union(3,6);
+     union(1,4);
+     System.out.println(find(3));
+     System.out.println(find(4));
+    
+    }}
+
+
+
+
+
+
+
+//4. kruskals algorithm
+//TC:-O(e LOG e) + O(v)
+
+import java.util.*;
+public class Main {
+    static class edge implements Comparable<edge> {
+        int src;
+        int dest;
+        int wt;
+        
+        public edge(int s, int d, int w) {
+            this.src = s;
+            this.dest = d;
+            this.wt = w;
+        }
+        
+        
+        @Override
+        public int compareTo(edge e2) {
+            return this.wt - e2.wt;
+        }
+    }
+        
+    static void createGraph(ArrayList<edge> graph) {
+        graph.add(new edge(0, 1, 10));
+        graph.add(new edge(0, 2, 15));
+        graph.add(new edge(0, 3, 30));
+        graph.add(new edge(1, 3, 40));
+        graph.add(new edge(2, 3, 50));
+    } 
+
+    static int n = 4;
+    static int par[] = new int[n];
+    static int rank[] = new int[n];
+
+    public static void init() {
+        for (int i = 0; i < n; i++) {
+            par[i] = i;
+        }
+    }
+    
+    public static int find(int x) {
+        if (par[x] == x) {
+            return x;
+        }
+        return par[x] = find(par[x]); 
+    }
+
+    public static void union(int a, int b) {
+        int parA = find(a);
+        int parB = find(b);
+        
+        if (rank[parA] == rank[parB]) {
+            par[parB] = parA;
+            rank[parA]++;
+        } else if (rank[parA] < rank[parB]) {
+            par[parA] = parB; 
+        } else {
+            par[parB] = parA;
+        }
+    }
+
+    public static void karuskalAlgo(ArrayList<edge> graph, int v) {
+        init();
+        Collections.sort(graph); 
+        int mstCost = 0;
+        int count = 0;
+       
+        
+        for (int i = 0; i < graph.size(); i++) {
+            edge e = graph.get(i);
+            
+            int parA = find(e.src);
+            int parB = find(e.dest);
+           
+            if (parA != parB) {
+                union(e.src, e.dest);
+                mstCost += e.wt;
+                count++;
+                
+// Optimization check: An MST with V vertices always has exactly V-1 edges.
+                if (count == v - 1) {
+                    break;
+                }} }
+       
+        System.out.println(mstCost);
+    }
+
+    public static void main(String args[]) {
+        int v = 4;
+        ArrayList<edge> graph = new ArrayList<>();
+        createGraph(graph);
+        
+        karuskalAlgo(graph, v); 
+    }
+}
+
+
+
+
+//Flood fill Algorithm (leedCode 733)
+//TC:-(m*n) (where row*column)
+

@@ -1,0 +1,179 @@
+//1. build tries data structure and questions o(L)
+public class Main{
+    static class Node{
+        Node children[]=new Node[26];
+        boolean endOfWord=false;
+        
+       public Node(){
+            for(int i=0;i<26;i++){
+                children[i]=null;
+            }}}
+            
+public static Node root=new Node();
+
+//1.insert o(L)
+public static void insert(String word){
+    Node curr=root;
+    for(int level=0;level<word.length();level++){
+        int index=word.charAt(level)-'a';
+        if(curr.children[index]==null){
+            curr.children[index]=new Node();
+            }
+            curr=curr.children[index];
+        }
+        curr.endOfWord=true; }
+
+//2.search o(L)
+        
+    public static boolean search(String key){
+        Node curr=root;
+        for(int level=0;level<key.length();level++){
+            int index=key.charAt(level)-'a';
+            if(curr.children[index]==null){
+                return false;
+            }
+            curr=curr.children[index];
+        }
+        return curr.endOfWord==true; }
+        
+       //3.Word Break Function
+    public static boolean wordsBreak(String key) {
+        // Base Case: अगर पूरी स्ट्रिंग टूटते-टूटते खाली हो गई, मतलब रास्ता मिल गया!
+        if (key.length() == 0) {
+            return true;
+        }
+        for (int i = 1; i <= key.length(); i++) {
+            // key.substring(0, i) -> पहला हिस्सा (First part)
+            // key.substring(i)    -> बचा हुआ हिस्सा (Remaining part)
+            
+if (search(key.substring(0, i)) && wordsBreak(key.substring(i))) {
+                return true;
+            } }
+        return false; }
+        
+    public static void main(String args[]){
+        String arr[]={"i","like","sam","samsung","mobile","ice"};
+        for(int i=0;i<arr.length;i++){
+            insert(arr[i]);
+        }
+        
+        String key = "ilikesamsung";
+        System.out.println(wordsBreak(key));
+        
+        
+        System.out.println(search("like"));
+        System.out.println(search("apple"));
+    }
+}
+
+
+
+
+
+
+
+
+
+//2.start with problem(prefix) TC:-o(L)
+//in this code not bulid node and insert method so you build a this method
+public static boolean startWith(String prefix){
+   Node curr=root;
+   
+   for(int i=0;i<prefix.length();i++){
+       int index=prefix.charAt(i)-'a';
+       if(curr.children[index]==null){
+           return false;
+       }
+       curr=curr.children[index];
+   }
+   return true;
+}
+    public static void main(String args[]){
+        String words[]={"apple","app","mango","man","woman"};
+        String prefix1="app";
+        String prefix2="moon";
+        
+        for(int i=0;i<words.length;i++){
+            insert(words[i]);
+        }
+        
+        System.out.println(startWith(prefix1));
+        System.out.println(startWith(prefix2));
+    }
+
+
+
+
+
+
+
+
+
+//3.count Unique subString o(L)
+//in this code not bulid node and insert method so you build a this method
+public static int countNode(Node root){
+    if(root==null){
+       return 0; }
+       
+       int count=0;
+       for(int i=0;i<26;i++){
+           if(root.children[i] != null){
+               count +=countNode(root.children[i]);
+           } }
+          return count+1;
+}
+
+public static void main(String args[]){
+  String str="ababa";
+  
+  for(int i=0;i<str.length();i++){
+      String suffix=str.substring(i);
+      insert(suffix);
+  }
+  
+  System.out.println(countNode(root));}
+
+
+
+
+
+
+
+
+
+//4.Longest Word Function (DFS + Backtracking) TC:-o(L)
+//in this code not bulid node and insert method so you build a this method
+
+    public static void longestWord(Node root, StringBuilder temp) {
+        if (root == null) {
+            return;
+        }
+        
+        for (int i = 0; i < 26; i++) {
+            
+            if (root.children[i] != null && root.children[i].endOfWord) {
+                char ch = (char) (i + 'a');
+                temp.append(ch); // 1. कैरेक्टर को जोड़ें (Choose)
+
+                
+                if (temp.length() > ans.length()) {
+                    ans = temp.toString(); // नया बड़ा वर्ड मिलने पर अपडेट करें
+                }
+
+                longestWord(root.children[i], temp); // 2. गहराई में जाएं (Explore)
+
+                temp.deleteCharAt(temp.length() - 1); 
+            }}}
+
+    public static void main(String args[]) {
+
+        String words[] = {"a", "banana", "app", "appl", "ap", "apply", "apple"};
+        
+        for (int i = 0; i < words.length; i++) {
+            insert(words[i]);
+        }
+        
+        longestWord(root, new StringBuilder(""));
+        
+        System.out.println(ans);
+    }

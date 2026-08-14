@@ -1,0 +1,105 @@
+ALGORITHM BubbleSort(array)
+    n = length of array
+
+    // Outer loop for the number of passes
+    FOR turn FROM 0 TO n - 2 DO
+        
+        // Inner loop for comparing adjacent elements
+        FOR j FROM 0 TO n - turn - 2 DO
+            
+            // If the current element is greater than the next
+            IF array[j] > array[j + 1] THEN
+                
+                // Swap the two elements
+                temp = array[j]
+                array[j] = array[j + 1]
+                array[j + 1] = temp
+                
+            END IF
+        END FOR
+        
+    END FOR
+END ALGORITHM
+
+
+
+
+ALGORITHM SelectionSort(array)
+    n = length of array
+
+    // One by one move the boundary of the unsorted subarray
+    FOR i FROM 0 TO n - 2 DO
+        
+        // Step 1: Assume the first unsorted element is the minimum
+        minPosition = i
+        
+        // Step 2: Check the rest of the array to find the actual minimum
+        FOR j FROM i + 1 TO n - 1 DO
+            IF array[j] < array[minPosition] THEN
+                minPosition = j
+            END IF
+        END FOR
+        
+        // Step 3: Swap the found minimum element with the first unsorted element
+        temp = array[minPosition]
+        array[minPosition] = array[i]
+        array[i] = temp
+        
+    END FOR
+END ALGORITHM
+
+
+
+
+ALGORITHM InsertionSort(array)
+    n = length of array
+
+    // Step 1: Start from the second element (index 1)
+    FOR i FROM 1 TO n - 1 DO
+        
+        currentElement = array[i]
+        previousIndex = i - 1
+        
+        // Step 2: Shift elements of the sorted part to the right
+               WHILE previousIndex >= 0 AND array[previousIndex] > currentElement DO
+            
+            array[previousIndex + 1] = array[previousIndex] // Shift right
+            previousIndex = previousIndex - 1               // Move left
+            
+        END WHILE
+        
+        // Step 3: Insert the currentElement into its correct gap
+        array[previousIndex + 1] = currentElement
+        
+    END FOR
+END ALGORITHM
+
+
+
+
+ALGORITHM CountingSort(array)
+    n = length of array
+    
+    // Step 1: Find the maximum value in the array
+    largest = FindMax(array)
+
+    // Step 2: Create a Frequency array (initialized with 0s)
+    // Its size must be (largest + 1) to use numbers as indices
+    countArray = NEW ARRAY of size (largest + 1)
+
+    // Step 3: Count the frequency of each element
+    FOR i FROM 0 TO n - 1 DO
+        number = array[i]
+        countArray[number] = countArray[number] + 1
+    END FOR
+
+    // Step 4: Reconstruct the original array
+    j = 0
+    FOR i FROM 0 TO length of countArray - 1 DO
+        WHILE countArray[i] > 0 DO
+            array[j] = i      // Place the index (the actual number) into array
+            j = j + 1
+            countArray[i] = countArray[i] - 1
+        END WHILE
+    END FOR
+END ALGORITHM

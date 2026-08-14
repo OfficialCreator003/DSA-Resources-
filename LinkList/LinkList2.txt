@@ -1,0 +1,348 @@
+//1.Floy's cycle find algorithms(CFA)
+//Detecting cycle in Linked List 
+
+public static boolean isCycle(){
+    Node slow=head;
+    Node fast=head;
+    
+    while(fast != null && fast.next != null){
+        slow=slow.next; //+1
+        fast=fast.next.next;  //+2
+        if(slow==fast){
+            return true;
+        }
+    }
+    return false;  //cycle not exists 
+}
+    
+    
+       public static void main(String args[]){
+        head=new Node(1);
+        head.next=new Node(2);
+        head.next.next=new Node(3);
+        head.next.next.next=head;
+        //1->2->3->1  (cycle exists)
+        System.out.println(isCycle());
+} }
+
+
+
+
+
+
+
+ //2.Remove cycle in a Linked List
+    public static void RemoveCycle(){
+    //detect cycle
+    Node slow=head;
+    Node fast=head;
+    boolean cycle=false;
+    while(fast!=null && fast.next!=null){
+        slow=slow.next;
+        fast=fast.next.next;
+        if(fast == slow){
+            cycle=true;
+            break;
+        } }
+        
+        if(cycle==false){
+            return;
+        }
+        
+//find meting point
+slow=head;
+Node prev=null;
+while(slow != fast){
+   prev=fast;
+   slow=slow.next;
+   fast=fast.next;
+}
+       //remove cycle->last.next=null 
+      prev.next=null;  
+    }
+
+    //This is main method for call LinkedList
+    public static void main(String args[]){
+       head=new Node(1);
+       Node temp=new Node(2);
+       head.next=temp;
+       head.next.next=new Node(3);
+       head.next.next.next=temp;
+       
+  System.out.println(isCycle());
+  RemoveCycle();
+  
+  System.out.println(isCycle());
+    }
+}
+
+
+
+
+
+
+
+
+//3.create remove and add using java collection framework
+import java.util.LinkedList;
+public class Main{
+    public static void main(String args[]){
+        
+        
+        //create
+        LinkedList<Integer>LL=new LinkedList<>();
+        
+        //add
+        LL.addLast(1);
+        LL.addLast(2);
+        LL.addLast(3);
+        LL.addFirst(6);
+        LL.addFirst(5);
+        LL.addFirst(4);
+        
+        //remove
+        LL.removeFirst();
+        LL.removeLast();
+        
+        System.out.println(LL);
+    }
+}
+
+
+
+
+
+
+
+//4.merge sort on linked list o(NlogN)
+
+public class Main {
+    
+    private Node getMid(Node head) {
+        Node slow = head;
+        Node fast = head.next; //helps split 2-node lists correctly
+        
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+    
+    private Node merge(Node head1, Node head2) {
+        Node mergedLL = new Node(-1); // Dummy node
+        Node temp = mergedLL;
+        
+        while (head1 != null && head2 != null) {
+            if (head1.data <= head2.data) {
+                temp.next = head1;
+                head1 = head1.next;
+            } else {
+                temp.next = head2;
+                head2 = head2.next;
+            }
+            temp = temp.next;
+        }
+        
+        // Attach remaining nodes
+        if (head1 != null) temp.next = head1;
+        if (head2 != null) temp.next = head2;
+        
+        return mergedLL.next;
+    }
+
+    public Node mergeSort(Node head) {
+         //base case
+        if (head == null || head.next == null) {
+            return head;
+        }
+        
+        Node mid = getMid(head);
+        
+        // Split the list
+        Node rightHead = mid.next;
+        mid.next = null; // Break the link
+        
+        // Recursively sort
+        Node newLeft = mergeSort(head);
+        Node newRight = mergeSort(rightHead);
+        
+        // Merge the sorted halves
+        return merge(newLeft, newRight);
+    }
+}
+
+//This is main method for call LinkedList
+    public static void main(String args[]){
+        
+        //create same linkedlist class object name of LL
+        LinkedList LL=new LinkedList();
+        
+        LL.addFirst(10);
+        LL.addFirst(50);
+         LL.addFirst(200);
+         LL.addLast(100);
+         
+         LL.print();
+         LL.head=LL.mergeSort(LL.head);
+         LL.print();
+
+
+
+}
+    }
+
+
+
+
+
+
+
+//5.print ZigZag LinkedList
+ public void zigZag(){
+        //find mid
+        Node slow=head;
+        Node fast=head.next;
+        
+        while(fast!=null && fast.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
+            }
+            Node mid=slow;
+        
+        //reverse second half
+        Node curr=mid.next;
+        mid.next=null;
+        Node prev=null;
+        Node next;
+        
+        while(curr!=null){
+            next=curr.next;
+            curr.next=prev;
+            prev=curr;
+            curr=next;
+        }
+        Node left=head;
+        Node right=prev;
+        Node nextL,nextR;
+        
+        //alt merge zigZag
+        while(left!=null && right!=null){
+            nextL=left.next;
+            left.next=right;
+            nextR=right.next;
+            right.next=nextL;
+            
+            left=nextL;
+            right=nextR;
+        }
+        
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Doubly Linked-List in this dll creating  Node class and addFirst,print,removeFirs and reverse mathod.
+public class doublyLL{
+    //Node class
+    public class Node{
+    int data;
+        Node next;
+        Node prev;
+        
+        public Node(int data){
+            this.data=data;
+            this.next=null;
+            this.prev=null;
+        }}
+        public static Node head;
+        public static Node tail;
+        public static int size;
+        
+        //add
+public void addFirst(int data){
+    Node newNode=new Node(data);
+    size++;
+    if(head==null){
+        head=tail=newNode;
+        return;
+    }
+newNode.next=head;
+head.prev=newNode;
+head=newNode;  }     
+
+//print
+public void print(){
+    Node temp=head;
+    while(temp!=null){
+      System.out.print(temp.data+"<->");  
+      temp=temp.next;
+    }
+    System.out.println("null"); }
+    
+    //removeFirst
+    public int removeFirst(){
+        if(head==null){
+    System.out.println("dll is empty");
+    return Integer.MIN_VALUE;
+        }
+        
+        if(size==1){
+           int value=head.data;
+           head=tail=null;
+           size--;
+           return value;
+        }
+        int value=head.data;
+        head=head.next;
+        head.prev=null;
+        size--;
+        return value;
+    }
+    //reverse the dll
+    public void reverse(){
+        Node curr=head;
+        Node prev=null;
+        Node next;
+        
+        while(curr!=null){
+            next=curr.next;
+            curr.next=prev;
+            curr.prev=next;
+            
+            prev=curr;
+            curr=next;
+            }
+            head=prev;}
+            
+//This is a main method            
+    public static void main(String args[]){
+        doublyLL dll=new doublyLL();
+        
+        dll.addFirst(10);
+        dll.addFirst(20);
+        dll.addFirst(30);
+        dll.addFirst(40);
+    
+    
+         dll.removeFirst();
+        System.out.println(dll.size);
+        
+
+        dll.print();
+        dll.reverse();
+        dll.print();
+        
+    }
+}
+
